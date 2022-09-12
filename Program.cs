@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace EnthusiasticMoose
 {
@@ -19,54 +21,50 @@ namespace EnthusiasticMoose
             AskQuestion("Do you love C# yet?");
             AskQuestion("Do you want to know a secret?");
         }
-
-        static void AskQuestion(string question)
+        
+        public class QandA
         {
-            Console.Write($"{question} (Y/N): ");
+            public string question {get;set;}
+            public string trueAnswer {get;set;}
+            public string falseAnswer {get;set;}
+
+            public QandA(string question, string trueAnswer, string falseAnswer)
+            {
+                this.question = question;
+                this.trueAnswer = trueAnswer;
+                this.falseAnswer = falseAnswer;
+            }
+        }
+
+        static void AskQuestion(string randomQuestion)
+        {
+            QandA canada = new QandA("Is Canada real?", "Really? It seems very unlikely.", "I  K N E W  I T !!!");
+            QandA enthusiastic = new QandA("Are you enthusiastic?", "Yay!", "You should try it!");
+            QandA csharp = new QandA("Do you love C# yet?", "Good job sucking up to your instructor!", "You will...oh, yes, you will...");
+            QandA secret = new QandA("Do you want to know a secret?", "ME TOO!!!! I love secrets...tell me one!", "Oh, no...secrets are the best, I love to share them!");
+            
+            List<QandA> QandAs = new List<QandA>() {canada,enthusiastic,csharp,secret};
+
+            Console.Write($"{randomQuestion} (Y/N): ");
             string answer = Console.ReadLine().ToLower();
 
             while (answer != "y" && answer != "n")
             {
-                Console.Write($"{question} (Y/N): ");
+                Console.Write($"{randomQuestion} (Y/N): ");
                 answer = Console.ReadLine().ToLower();
             }
 
-            if (answer == "y" && question.Contains("Canada"))
+            QandA foundQuestion = QandAs.First(q => q.question == randomQuestion);
+
+            if(answer == "y") 
             {
-                MooseSays("Really? It seems very unlikely.");
+                MooseSays($"{foundQuestion.trueAnswer}");
             }
-            else if (answer == "y" && question.Contains("enthusiastic"))
+            else if (answer == "n")
             {
-                MooseSays("Yay!");
+                MooseSays($"{foundQuestion.falseAnswer}");
             }
-            else if (answer == "y" && question.Contains("C#"))
-            {
-                MooseSays("Good job sucking up to your instructor!");
-            }
-            else if (answer == "y" && question.Contains("secret"))
-            {
-                MooseSays("ME TOO!!!! I love secrets...tell me one!");
-            }
-            else if (answer == "n" && question.Contains("Canada"))
-            {
-                MooseSays("I  K N E W  I T !!!");
-            }
-            else if (answer == "n" && question.Contains("enthusiastic"))
-            {
-                MooseSays("Yay!");
-            }
-            else if (answer == "n" && question.Contains("C#"))
-            {
-                MooseSays("You will...oh, yes, you will...");
-            }
-            else if (answer == "n" && question.Contains("secret"))
-            {
-                MooseSays("Oh, no...secrets are the best, I love to share them!");
-            }
-            else
-            {
-                MooseSays("I don't know that one");
-            }
+            
         }
 
         static void MooseSays(string message)
